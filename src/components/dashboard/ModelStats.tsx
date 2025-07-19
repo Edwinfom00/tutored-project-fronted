@@ -64,10 +64,10 @@ export default function ModelStats() {
         <div className="space-y-6">
             {/* Statut du modèle */}
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Statut du Modèle d'IA</h2>
+                <h2 className="text-xl font-semibold">Statut du Modèle d&apos;IA</h2>
                 <span className={`px-3 py-1 rounded-full text-sm ${stats.model_status === 'active'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
                     }`}>
                     {stats.model_status === 'active' ? 'Actif' : 'Inactif'}
                 </span>
@@ -97,7 +97,7 @@ export default function ModelStats() {
 
             {/* Distribution des attaques */}
             <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="text-lg font-medium mb-4">Distribution des Types d'Attaques</h3>
+                <h3 className="text-lg font-medium mb-4">Distribution des Types d&apos;Attaques</h3>
                 <div className="space-y-2">
                     {Object.entries(stats.attack_distribution).map(([type, count]) => (
                         <div key={type} className="flex justify-between items-center">
@@ -122,8 +122,8 @@ export default function ModelStats() {
                                     </p>
                                 </div>
                                 <span className={`px-2 py-1 rounded text-sm ${alert.severity === 'high'
-                                        ? 'bg-red-100 text-red-800'
-                                        : 'bg-yellow-100 text-yellow-800'
+                                    ? 'bg-red-100 text-red-800'
+                                    : 'bg-yellow-100 text-yellow-800'
                                     }`}>
                                     {alert.severity}
                                 </span>

@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { useNetworkData } from '@/hooks/useWebSocket'
+import { useNetworkData } from '@/hooks/useNetworkData';
+
 
 interface NetworkData {
     timestamp: number;
@@ -11,23 +12,22 @@ interface NetworkData {
 }
 
 export function NetworkTraffic() {
-    const [data, setData] = useState<NetworkData[]>([])
-    const { lastData, error, isConnected } = useNetworkData()
+    const [chartData, setChartData] = useState<NetworkData[]>([])
+    const { data, error, isLoading } = useNetworkData()
 
     useEffect(() => {
-        if (lastData && lastData.type === 'stats') {
+        if (data && data.stats) {
             const newData = {
-                timestamp: new Date(lastData.data.timestamp || Date.now()).getTime(),
-                bytes: lastData.data.total_bytes || 0,
-                packets: lastData.data.total_packets || 0
+                timestamp: Date.now(),
+                bytes: 0, // No total_bytes, set to 0 or remove if not needed
+                packets: data.stats.total_packets || 0
             }
-            setData(prevData => {
+            setChartData(prevData => {
                 const updatedData = [...prevData, newData]
-                // Garder seulement les 100 derniers points pour éviter la surcharge
                 return updatedData.slice(-100)
             })
         }
-    }, [lastData])
+    }, [data])
 
     if (error) {
         return (
@@ -42,9 +42,7 @@ export function NetworkTraffic() {
         )
     }
 
-
-
-    if (!isConnected) {
+    if (isLoading) {
         return (
             <Card className="col-span-full">
                 <CardHeader>
@@ -65,32 +63,18 @@ export function NetworkTraffic() {
             <CardContent>
                 <div className="h-[400px]">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={data}>
+                        <LineChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
                                 dataKey="timestamp"
                                 tickFormatter={(timestamp) => new Date(timestamp).toLocaleTimeString()}
                             />
-                            <YAxis yAxisId="left" />
-                            <YAxis yAxisId="right" orientation="right" />
+                            <YAxis />
                             <Tooltip
                                 labelFormatter={(timestamp) => new Date(timestamp).toLocaleString()}
-                                formatter={(value, name) => {
-                                    if (name === 'bytes') return [`${(Number(value) / 1024 / 1024).toFixed(2)} MB`, 'Octets']
-                                    return [value, 'Paquets']
-                                }}
+                                formatter={(value) => [value, 'Paquets']}
                             />
                             <Line
-                                yAxisId="left"
-                                type="monotone"
-                                dataKey="bytes"
-                                stroke="#8884d8"
-                                name="Octets"
-                                dot={false}
-                                isAnimationActive={false}
-                            />
-                            <Line
-                                yAxisId="right"
                                 type="monotone"
                                 dataKey="packets"
                                 stroke="#82ca9d"

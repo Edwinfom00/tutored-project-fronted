@@ -29,17 +29,17 @@ const sidebarItems = [
     },
     {
         title: "Règles IDS",
-        href: "/dashboard/rules",
+        href: "/rules",
         icon: Shield
     },
     {
         title: "Menaces",
-        href: "/dashboard/threats",
+        href: "/threats",
         icon: AlertTriangle
     },
     {
         title: "Configuration",
-        href: "/dashboard/settings",
+        href: "/settings",
         icon: Settings
     }
 ]

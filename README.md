@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Next.js – IDS AI System
 
-## Getting Started
+## Pages principales
 
-First, run the development server:
+### 1. Dashboard (`/dashboard`)
+- Vue globale sur les métriques du modèle, l’historique d’entraînement, et les logs de tests.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 2. Settings (`/settings`)
+- **Configuration réelle** des seuils d’alerte (sliders) et des modules actifs (toggles).
+- Les modifications sont **persistées côté backend** via l’API `/api/settings`.
+- Design moderne, feedback utilisateur (succès/erreur).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Rules (`/rules`)
+- **Gestion dynamique des règles de détection** (ajout, édition, suppression).
+- Les règles sont stockées côté backend via l’API `/api/rules`.
+- Édition inline, ajout rapide, suppression, feedback utilisateur.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Threats (`/threats`)
+- Présentation pédagogique de toutes les attaques détectées par le système.
+- Explications, méthodes de détection, mitigations, exemples.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Endpoints backend utilisés
+- `GET/POST /api/settings` : lecture et modification des paramètres système.
+- `GET/POST /api/rules` : lecture et modification des règles de détection.
 
-## Learn More
+## Prérequis
+- Le backend Flask doit être lancé et accessible sur `http://localhost:5000`.
+- Les routes `/api/settings` et `/api/rules` doivent être enregistrées côté backend.
 
-To learn more about Next.js, take a look at the following resources:
+## Nouveautés UI/UX
+- Design moderne (cards, sliders, toggles, édition inline, feedback visuel).
+- Pages 100% interactives et synchronisées avec le backend.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pour toute modification, voir aussi le README backend.
