@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
 
 const MODULES = [
@@ -72,7 +73,7 @@ export default function SettingsPage() {
                     <h2 className="text-xl font-semibold mb-2">Seuils d&apos;alerte</h2>
                     <div>
                         <label className="block font-medium mb-1">Seuil Brute Force (tentatives)</label>
-                        <input
+                        <Input
                             type="range"
                             min={3}
                             max={50}
@@ -84,7 +85,7 @@ export default function SettingsPage() {
                     </div>
                     <div>
                         <label className="block font-medium mb-1">Seuil DoS (requêtes/minute)</label>
-                        <input
+                        <Input
                             type="range"
                             min={100}
                             max={5000}

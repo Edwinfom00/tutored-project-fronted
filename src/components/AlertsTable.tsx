@@ -68,8 +68,8 @@ export default function AlertsTable() {
 
     return (
         <div className="space-y-4">
-            {alerts.map((alert) => (
-                <div key={alert.id} className="p-4 border rounded-lg shadow-sm">
+            {alerts.map((alert, index) => (
+                <div key={index} className="p-4 border rounded-lg shadow-sm">
                     <div className="flex justify-between items-start">
                         <div>
                             <h3 className="font-semibold">{alert.attackType}</h3>

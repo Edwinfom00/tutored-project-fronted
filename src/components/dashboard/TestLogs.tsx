@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, PieLabelRenderProps } from 'recharts';
 import { useMemo, useState, useEffect } from 'react';
-// import jsPDF from 'jspdf';
-// import 'jspdf-autotable'; // SUPPRIMÉ : on utilise un import dynamique dans exportPDF
+import jsPDF from 'jspdf';
 
 interface TestLog {
     id: string
@@ -60,8 +59,6 @@ type AutoTableCellData = {
 };
 
 async function exportPDF(logs: TestLog[]) {
-    const jsPDF = (await import('jspdf')).default;
-    await import('jspdf-autotable');
     const doc = new jsPDF();
     doc.setFontSize(16);
     doc.text('Logs des Tests', 14, 18);
@@ -188,6 +185,7 @@ export function TestLogs({ logs }: TestLogsProps) {
                             className="rounded border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                             value={statusFilter}
                             onChange={e => setStatusFilter(e.target.value as "all" | "success" | "error" | "warning")}
+                            title="Filtrer les logs par statut"
                         >
                             <option value="all">Tous</option>
                             <option value="success">Succès</option>

@@ -112,8 +112,8 @@ export default function ModelStats() {
             <div className="bg-white p-4 rounded-lg shadow">
                 <h3 className="text-lg font-medium mb-4">Alertes Récentes</h3>
                 <div className="space-y-4">
-                    {stats.recent_alerts.map((alert) => (
-                        <div key={alert.id} className="border-b pb-4 last:border-b-0 last:pb-0">
+                    {stats.recent_alerts.map((alert, index) => (
+                        <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
                             <div className="flex justify-between items-start">
                                 <div>
                                     <p className="font-medium">{alert.attackType}</p>

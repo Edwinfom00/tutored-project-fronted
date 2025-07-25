@@ -1,4 +1,6 @@
 "use client";
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useState, useEffect } from 'react';
 
 interface Rule {
@@ -95,17 +97,17 @@ export default function RulesPage() {
                     <div key={rule.id} className="bg-white rounded-2xl shadow p-6 flex flex-col gap-2 relative">
                         {editId === rule.id ? (
                             <>
-                                <input
+                                <Input
                                     className="text-xl font-bold mb-1 border-b border-blue-200 focus:outline-none focus:border-blue-600"
                                     value={rule.name}
                                     onChange={e => handleEditRule(rule.id, 'name', e.target.value)}
                                 />
-                                <textarea
+                                <Textarea
                                     className="mb-1 text-gray-700 border-b border-blue-100 focus:outline-none focus:border-blue-600"
                                     value={rule.description}
                                     onChange={e => handleEditRule(rule.id, 'description', e.target.value)}
                                 />
-                                <input
+                                <Input
                                     className="mb-1 text-gray-700 border-b border-blue-100 focus:outline-none focus:border-blue-600"
                                     value={rule.action}
                                     onChange={e => handleEditRule(rule.id, 'action', e.target.value)}
