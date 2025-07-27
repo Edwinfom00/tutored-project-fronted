@@ -1,7 +1,18 @@
+"use client";
 import AlertsTable from "@/components/AlertsTable";
-
+import { useEffect, useState } from "react";
 
 export default function AlertsPage() {
+    const [alerts, setAlerts] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/stats/alerts")
+            .then(res => res.json())
+            .then(data => setAlerts(data))
+            .catch(err => setError(err.message));
+    }, []);
+
     return (
         <div className="space-y-6 p-7">
             <div className="flex items-center justify-between">
@@ -10,7 +21,7 @@ export default function AlertsPage() {
                     <span className="text-sm text-gray-500">Dernière mise à jour: {new Date().toLocaleString('fr-FR')}</span>
                 </div>
             </div>
-            <AlertsTable />
+            <AlertsTable alerts={alerts} error={error} />
         </div>
     )
 } 

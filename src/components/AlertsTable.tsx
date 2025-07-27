@@ -1,65 +1,33 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Trash2 } from 'lucide-react';
 
 interface Alert {
-    id: string
-    sourceIp: string
-    destinationIp: string
-    protocol: string
-    timestamp: string
-    attackType: string
-    severity: 'low' | 'medium' | 'high'
+    id: number;
+    attackType: string;
+    timestamp: string;
+    severity: string;
+    sourceIp: string;
+    destinationIp: string;
+    protocol: string;
 }
 
-export default function AlertsTable() {
-    const [alerts, setAlerts] = useState<Alert[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+interface AlertsTableProps {
+    alerts: Alert[];
+    error?: string | null;
+}
 
+export default function AlertsTable({ alerts, error }: AlertsTableProps) {
+    const sortedAlerts = alerts.slice().sort((a: Alert, b: Alert) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    const [localAlerts, setLocalAlerts] = useState<Alert[]>(sortedAlerts);
     useEffect(() => {
-        const fetchAlerts = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/stats/alerts')
-                if (!response.ok) throw new Error('Erreur lors de la récupération des alertes')
-                const data = await response.json()
-                setAlerts(data)
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Une erreur est survenue')
-                // Données de test en cas d'erreur
-                setAlerts([
-                    {
-                        id: '1',
-                        sourceIp: '192.168.1.100',
-                        destinationIp: '10.0.0.5',
-                        protocol: 'TCP',
-                        timestamp: new Date().toISOString(),
-                        attackType: 'SQL Injection',
-                        severity: 'high'
-                    },
-                    {
-                        id: '2',
-                        sourceIp: '172.16.0.23',
-                        destinationIp: '192.168.1.1',
-                        protocol: 'UDP',
-                        timestamp: new Date(Date.now() - 3600000).toISOString(),
-                        attackType: 'Port Scan',
-                        severity: 'medium'
-                    }
-                ])
-            } finally {
-                setLoading(false)
-            }
-        }
+        setLocalAlerts(sortedAlerts);
+    }, [alerts]);
 
-        fetchAlerts()
-        // Rafraîchir toutes les 30 secondes
-        const interval = setInterval(fetchAlerts, 30000)
-        return () => clearInterval(interval)
-    }, [])
-
-    if (loading) {
-        return <div className="text-center py-10">Chargement des alertes...</div>
+    async function handleDelete(alertId: number) {
+        await fetch(`http://localhost:5000/api/stats/alerts/${alertId}`, { method: 'DELETE' });
+        setLocalAlerts(prev => prev.filter(a => a.id !== alertId));
     }
 
     if (error) {
@@ -68,30 +36,33 @@ export default function AlertsTable() {
 
     return (
         <div className="space-y-4">
-            {alerts.map((alert, index) => (
-                <div key={index} className="p-4 border rounded-lg shadow-sm">
-                    <div className="flex justify-between items-start">
-                        <div>
+            {localAlerts.map((alert, index) => (
+                <div key={alert.id || index} className="p-4 border rounded-lg shadow-sm flex justify-between items-center">
+                    <div>
+                        <div className="flex items-center gap-2">
                             <h3 className="font-semibold">{alert.attackType}</h3>
-                            <p className="text-sm text-gray-500">
-                                {new Date(alert.timestamp).toLocaleString()}
-                            </p>
+                            <span className={`px-2 py-1 rounded text-sm ${alert.severity === 'high' ? 'bg-red-100 text-red-800' :
+                                alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-green-100 text-green-800'
+                                }`}>
+                                {alert.severity}
+                            </span>
                         </div>
-                        <span className={`px-2 py-1 rounded text-sm ${alert.severity === 'high' ? 'bg-red-100 text-red-800' :
-                            alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-green-100 text-green-800'
-                            }`}>
-                            {alert.severity}
-                        </span>
+                        <p className="text-sm text-gray-500">
+                            {new Date(alert.timestamp).toLocaleString()}
+                        </p>
+                        <div className="mt-2 text-sm">
+                            <p>Source: {alert.sourceIp}</p>
+                            <p>Destination: {alert.destinationIp}</p>
+                            <p>Protocole: {alert.protocol}</p>
+                        </div>
                     </div>
-                    <div className="mt-2 text-sm">
-                        <p>Source: {alert.sourceIp}</p>
-                        <p>Destination: {alert.destinationIp}</p>
-                        <p>Protocole: {alert.protocol}</p>
-                    </div>
+                    <button onClick={() => handleDelete(alert.id)} aria-label="Supprimer l'alerte">
+                        <Trash2 className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer" />
+                    </button>
                 </div>
             ))}
-            {alerts.length === 0 && (
+            {localAlerts.length === 0 && (
                 <div className="text-center py-10 text-gray-500">
                     Aucune alerte récente
                 </div>
