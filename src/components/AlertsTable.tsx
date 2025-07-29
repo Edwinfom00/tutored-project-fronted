@@ -37,7 +37,7 @@ export default function AlertsTable({ alerts, error }: AlertsTableProps) {
     return (
         <div className="space-y-4">
             {localAlerts.map((alert, index) => (
-                <div key={alert.id || index} className="p-4 border rounded-lg shadow-sm flex justify-between items-center">
+                <div key={index} className="p-4 border rounded-lg shadow-sm flex justify-between items-center">
                     <div>
                         <div className="flex items-center gap-2">
                             <h3 className="font-semibold">{alert.attackType}</h3>
